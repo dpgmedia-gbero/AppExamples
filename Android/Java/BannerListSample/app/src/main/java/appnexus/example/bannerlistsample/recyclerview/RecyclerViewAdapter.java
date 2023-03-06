@@ -7,9 +7,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.appnexus.opensdk.AdListener;
+import com.appnexus.opensdk.AdView;
 import com.appnexus.opensdk.BannerAdView;
+import com.appnexus.opensdk.NativeAdResponse;
+import com.appnexus.opensdk.ResultCode;
+
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import appnexus.example.bannerlistsample.R;
+import appnexus.example.bannerlistsample.utils.Constants;
 
 /**
  * The {@link RecyclerViewAdapter} class.
@@ -29,6 +40,8 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     // The list of banner ads and member id items.
     private final List<Object> recyclerViewItems;
+
+    private final Map<Integer, BannerAdView> cachedAdViews = new HashMap<>();
 
     // invoke the suitable constructor of the Adapter class
     public RecyclerViewAdapter(Context context, List<Object> recyclerViewItems) {
@@ -124,7 +137,15 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             //If view type is banner ad
             case BANNER_AD_VIEW_TYPE:
                 AdViewHolder bannerHolder = (AdViewHolder) holder;
-                BannerAdView bannerAdView = (BannerAdView) recyclerViewItems.get(position);
+//                (BannerAdView) recyclerViewItems.get(position)
+                BannerAdView bannerAdView = null;
+                if(cachedAdViews.containsKey(position)) {
+                    bannerAdView = cachedAdViews.get(position);
+                } else {
+                    bannerAdView = createBannerAdView(holder.itemView.getContext());
+                    cachedAdViews.put(position, bannerAdView);
+                }
+
                 ViewGroup adCardView = (ViewGroup) bannerHolder.itemView;
 
                 // The AdViewHolder recycled by the RecyclerView may be a different
@@ -140,5 +161,62 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 adCardView.addView(bannerAdView);
                 break;
         }
+    }
+
+    private BannerAdView createBannerAdView(Context context) {
+
+        // create an instance of banner.
+        final BannerAdView bannerAdView = new BannerAdView(context);
+
+        // Set a placement id.
+        bannerAdView.setPlacementID(Constants.PLACEMENT_ID);
+
+        // Get a 300x50 ad.
+        bannerAdView.setAdSize(300, 50);
+
+        // Set to 0 to disable auto-refresh.
+        bannerAdView.setAutoRefreshInterval(0);
+
+        // Turning this on so we always get an ad during testing.
+        bannerAdView.setShouldServePSAs(true);
+
+        // Set whether ads will expand to fit the screen width.
+        bannerAdView.setExpandsToFitScreenWidth(true);
+
+        //Set ad listener and load ad.
+        bannerAdView.loadAd();
+
+        // Set an AdListener on the AdView.
+        bannerAdView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded(AdView adView) {}
+
+            @Override
+            public void onAdLoaded(NativeAdResponse nativeAdResponse) {}
+
+            @Override
+            public void onAdRequestFailed(AdView adView, ResultCode resultCode) {}
+
+            @Override
+            public void onAdExpanded(AdView adView) {}
+
+            @Override
+            public void onAdCollapsed(AdView adView) {}
+
+            @Override
+            public void onAdClicked(AdView adView) {}
+
+            @Override
+            public void onAdClicked(AdView adView, String s) {}
+
+            @Override
+            public void onLazyAdLoaded(AdView adView) {}
+
+            @Override
+            public void onAdImpression(AdView adView) {}
+        });
+
+        return bannerAdView;
+
     }
 }

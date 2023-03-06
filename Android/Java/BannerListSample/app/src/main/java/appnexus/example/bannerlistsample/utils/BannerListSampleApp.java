@@ -14,7 +14,7 @@ public class BannerListSampleApp extends Application {
         //Initialize the XandrAd SDK with your member id
         XandrAd.init(10094, getApplicationContext(), true, new InitListener() {
             @Override
-            public void onInitFinished() {
+            public void onInitFinished(boolean b) {
                 Toast.makeText(getApplicationContext(), "Init Finished", Toast.LENGTH_SHORT).show();
             }
         });

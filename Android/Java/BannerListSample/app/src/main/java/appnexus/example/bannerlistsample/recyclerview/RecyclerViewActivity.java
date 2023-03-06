@@ -38,7 +38,6 @@ public class RecyclerViewActivity extends AppCompatActivity {
 
         // Update the RecyclerView item's list with member ids items and banner ads.
         addMemberId();
-        addBannerAds();
 
         // Specify an adapter.
         RecyclerView.Adapter<RecyclerView.ViewHolder> adapter = new RecyclerViewAdapter(this,
@@ -47,84 +46,12 @@ public class RecyclerViewActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * Adds banner ads to the items list.
-     */
-    private void addBannerAds() {
-        // Loop through the items array and place a new banner ad in every ith position in
-        // the items List.
-        for (int i = 0; i <= recyclerViewItems.size(); i += AD_DISPLAY_POS) {
-
-            // create an instance of banner.
-            final BannerAdView bannerAdView = new BannerAdView(this);
-
-            // Set a placement id.
-            bannerAdView.setPlacementID(Constants.PLACEMENT_ID);
-
-            // Get a 300x50 ad.
-            bannerAdView.setAdSize(300, 50);
-
-            // Set to 0 to disable auto-refresh.
-            bannerAdView.setAutoRefreshInterval(0);
-
-            // Turning this on so we always get an ad during testing.
-            bannerAdView.setShouldServePSAs(true);
-
-            // Set whether ads will expand to fit the screen width.
-            bannerAdView.setExpandsToFitScreenWidth(true);
-
-            //Set ad listener and load ad.
-            loadBannerAd(bannerAdView);
-
-            //Add banner ads in list.
-            recyclerViewItems.add(i, bannerAdView);
-        }
-    }
-
-    /**
-     * Adds listener and load ad.
-     */
-    private void loadBannerAd(BannerAdView loadBannerAdView) {
-
-        // Set an AdListener on the AdView.
-        loadBannerAdView.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded(AdView adView) {}
-
-            @Override
-            public void onAdLoaded(NativeAdResponse nativeAdResponse) {}
-
-            @Override
-            public void onAdRequestFailed(AdView adView, ResultCode resultCode) {}
-
-            @Override
-            public void onAdExpanded(AdView adView) {}
-
-            @Override
-            public void onAdCollapsed(AdView adView) {}
-
-            @Override
-            public void onAdClicked(AdView adView) {}
-
-            @Override
-            public void onAdClicked(AdView adView, String s) {}
-
-            @Override
-            public void onLazyAdLoaded(AdView adView) {}
-
-            @Override
-            public void onAdImpression(AdView adView) {}
-        });
-
-        // Load the banner ad.
-        loadBannerAdView.loadAd();
-    }
 
     /**
      * Add 20 member ids in list.
      */
     private void addMemberId() {
-        for (int i = 1; i <= 20; i++) {
+        for (int i = 1; i <= 200; i++) {
             recyclerViewItems.add("Member Id " + i);
         }
     }
