@@ -1,0 +1,9 @@
+<network-security-config>
+    <!-- Charles is allowed for release builds as well. This is just a test app. -->
+    <base-config>
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

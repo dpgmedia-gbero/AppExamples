@@ -114,7 +114,9 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 View bannerLayoutView = LayoutInflater.from(
                         viewGroup.getContext()).inflate(R.layout.banner_ad_container,
                         viewGroup, false);
-                return new AdViewHolder(bannerLayoutView);
+                AdViewHolder adViewHolder = new AdViewHolder(bannerLayoutView);
+                adViewHolder.setIsRecyclable(false);
+                return adViewHolder;
         }
         return null;
     }
